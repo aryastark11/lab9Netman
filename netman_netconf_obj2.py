@@ -64,17 +64,15 @@ if __name__ == "__main__":
 		edit_cfg = connection.edit_config(target='running', config=cfg1)
 
 	print('\n------------------Configs to all routers is sent------------------\n')
-
-    FETCH_INFO = f'''
+	FETCH_INFO = f'''
     		<filter>
     		<config-format-text-block>
     		<text-filter-spec> %s </text-filter-spec>
     		</config-format-text-block>
     		</filter>
     		'''
-
-    for i in range(0, 5):
-        connection = manager.connect(host=MGM_IP[i],
+	for i in range(0, 5):
+		connection = manager.connect(host=MGM_IP[i],
                                      port=22,
                                      username='lab',
                                      password='lab123',
@@ -82,29 +80,24 @@ if __name__ == "__main__":
                                      device_params={'name': 'iosxr'},
                                      allow_agent=False,
                                      look_for_keys=True)
-        print('Pulling information from router {} to display'.format(ROUTERS[i]))
-
-        FETCH_HOSTNAME = FETCH_INFO % ('| i hostname')
-        output1 = connection.get_config('running', FETCH_HOSTNAME)
-        split1 = str(output1).split()
-        hostname = split1[6]
-
-        FETCH_LO_INFO = FETCH_INFO % ('int Loopback99')
-        output2 = connection.get_config('running', FETCH_LO_INFO)
-        split2 = str(output2).split()
-        lo_ip_mask = split2[9] + '/' + str(IPAddress(split2[10]).netmask_bits())
-
-        FETCH_OSPF_INFO = FETCH_INFO % ('| s ospf')
-        output3 = connection.get_config('running', FETCH_OSPF_INFO)
-        split3 = str(output3).split()
-        LO_IP_PREFIX = str(ipaddress.ip_network(split3[9] + '/' + split3[10], strict=False)
-                           .prefixlen)
-        MGM_IP_PREFIX = str(ipaddress.ip_network(split3[14] + '/' + split3[15], strict=False)
-                            .prefixlen)
-        ospf_area = split3[12]
-        ospf_networks = split3[9] + '/' + LO_IP_PREFIX, split3[14] + '/' + MGM_IP_PREFIX
-
-        TABLE.add_row((ROUTERS[i], hostname, lo_ip_mask, ospf_area, ospf_networks))
-
-    print('\n------------------Displaying the fetched information------------------\n')
-    print(TABLE)
+		print('Pulling information from router {} to display'.format(ROUTERS[i]))
+		FETCH_HOSTNAME = FETCH_INFO % ('| i hostname')
+		output1 = connection.get_config('running', FETCH_HOSTNAME)
+		split1 = str(output1).split()
+		hostname = split1[6]
+		FETCH_LO_INFO = FETCH_INFO % ('int Loopback99')
+		output2 = connection.get_config('running', FETCH_LO_INFO)
+		split2 = str(output2).split()
+		lo_ip_mask = split2[9] + '/' + str(IPAddress(split2[10]).netmask_bits())
+		FETCH_OSPF_INFO = FETCH_INFO % ('| s ospf')
+		output3 = connection.get_config('running', FETCH_OSPF_INFO)
+		split3 = str(output3).split()
+		LO_IP_PREFIX = str(ipaddress.ip_network(split3[9] + '/' + split3[10], strict=False)
+						   .prefixlen)
+		MGM_IP_PREFIX = str(ipaddress.ip_network(split3[14] + '/' + split3[15], strict=False)
+							.prefixlen)
+		ospf_area = split3[12]
+		ospf_networks = split3[9] + '/' + LO_IP_PREFIX, split3[14] + '/' + MGM_IP_PREFIX
+		TABLE.add_row((ROUTERS[i], hostname, lo_ip_mask, ospf_area, ospf_networks))
+	print('\n------------------Displaying the fetched information------------------\n')
+	print(TABLE)
