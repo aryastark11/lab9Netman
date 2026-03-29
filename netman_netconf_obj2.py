@@ -50,8 +50,8 @@ if __name__ == "__main__":
 	</config>
 	'''
 
-    for i in range(0, 5):
-        connection = manager.connect(host=MGM_IP[i],
+	for i in range(0, 5):
+		connection = manager.connect(host=MGM_IP[i],
                                      port=22,
                                      username=UNAME[i],
                                      password=PWD[i],
@@ -59,10 +59,9 @@ if __name__ == "__main__":
                                      device_params={'name': 'iosxr'},
                                      allow_agent=False,
                                      look_for_keys=True)
-        print('Logging into router {} and sending configurations'.format(ROUTERS[i]))
-        cfg1 = CFG % (HOST[i], LO_NAME[i], LO_IP[i], MASK[i], NETWORKS[i], WILDCARD[i], AREA[i])
-        edit_cfg = connection.edit_config(target='running', config=cfg1)
-
+		print('Logging into router {} and sending configurations'.format(ROUTERS[i]))
+		cfg1 = CFG % (HOST[i], LO_NAME[i], LO_IP[i], MASK[i], NETWORKS[i], WILDCARD[i], AREA[i])
+		edit_cfg = connection.edit_config(target='running', config=cfg1)
     print('\n------------------Configs to all routers is sent------------------\n')
 
     FETCH_INFO = f'''
