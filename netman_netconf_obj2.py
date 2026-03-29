@@ -62,7 +62,8 @@ if __name__ == "__main__":
 		print('Logging into router {} and sending configurations'.format(ROUTERS[i]))
 		cfg1 = CFG % (HOST[i], LO_NAME[i], LO_IP[i], MASK[i], NETWORKS[i], WILDCARD[i], AREA[i])
 		edit_cfg = connection.edit_config(target='running', config=cfg1)
-    print('\n------------------Configs to all routers is sent------------------\n')
+
+	print('\n------------------Configs to all routers is sent------------------\n')
 
     FETCH_INFO = f'''
     		<filter>
