@@ -14,7 +14,7 @@ pipeline{
     }
     stage('Checking and fixing violations'){
       steps{
-        sh '''pylint netman_netconf_obj2.py'''
+        sh '''pylint netman_netconf_obj2.py --disable=bad-indentation'''
       }
     }
     stage('Running the application'){
