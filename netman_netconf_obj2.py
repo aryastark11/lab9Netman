@@ -15,13 +15,6 @@ except ImportError:
     sys.exit()
 
 if __name__ == "__main__":
-	"""
-	Read a CSV FILE for details and Configure OSPF on the interfaces .
-
-	Parameters: NONE
-
-	Returns: NONE
-	"""
 	TABLE = PrettyTable(['Router', 'Hostname', 'Loopback 99 IP',
 						 'OSPF area', 'Advertised OSPF Networks'])
 	FILE = 'info.csv'
@@ -106,6 +99,6 @@ if __name__ == "__main__":
 		ospf_area = split3[12]
 		ospf_networks = split3[9] + '/' + LO_IP_PREFIX, split3[14] + '/' + MGM_IP_PREFIX
 		TABLE.add_row((ROUTERS[i], hostname, lo_ip_mask, ospf_area, ospf_networks))
-		
+
 	print('\n------------------Displaying the fetched information------------------\n')
 	print(TABLE)
