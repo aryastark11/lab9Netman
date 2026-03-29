@@ -3,7 +3,11 @@ pipeline{
   stages{
     stage('Update/Install packages in the NetMan VM'){
       steps{
-        pip install nccclient, pandas, ipaddress, netaddr, prettytable
+        pip install nccclient
+        pip install pandas
+        pip install ipaddress
+        pip install netaddr
+        pip install prettytable
       }
     },
     stage('Checking and fixing violations'){
