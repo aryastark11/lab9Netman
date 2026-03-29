@@ -4,7 +4,7 @@ pipeline{
     stage('Update/Install packages in the NetMan VM'){
       steps{
         sh '''
-        pip install nccclient
+        pip install ncclient
         pip install pandas
         pip install ipaddress
         pip install netaddr
