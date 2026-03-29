@@ -3,26 +3,28 @@ pipeline{
   stages{
     stage('Update/Install packages in the NetMan VM'){
       steps{
+        sh '''
         pip install nccclient
         pip install pandas
         pip install ipaddress
         pip install netaddr
         pip install prettytable
+        '''
       }
     }
     stage('Checking and fixing violations'){
       steps{
-        pylint netman_netconf_obj2.py
+        sh '''pylint netman_netconf_obj2.py'''
       }
     }
     stage('Running the application'){
       steps{
-        python netman_netconf_obj2.py 
+        sh '''python netman_netconf_obj2.py '''
       }
     }
     stage('Unit Test'){
       steps{
-        python unit_tests.py 
+       sh '''python unit_tests.py'''
       }
     }
   }
