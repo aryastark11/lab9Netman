@@ -7,18 +7,22 @@ try:
     import ipaddress
     import os
     import sys
-except Exception:
+except ImportError:
     print('Install all the necessary modules')
     sys.exit()
 
 if __name__ == "__main__":
-    TABLE = PrettyTable(['Router', 'Hostname', 'Loopback 99 IP', 'OSPF area', 'Advertised OSPF Networks'])
-    file = 'info.csv'
-    if not os.path.exists(file):
-        print("File {} not found, exiting".format(file))
+	"""
+	Read a CSV FILE for details and Configure OSPF on the interfaces .
+	"""
+    TABLE = PrettyTable(['Router', 'Hostname', 'Loopback 99 IP',
+						 'OSPF area', 'Advertised OSPF Networks'])
+    FILE = 'info.csv'
+    if not os.path.exists(FILE):
+        print("FILE {} not found, exiting".format(FILE))
         sys.exit()
-    if os.stat(file).st_size == 0:
-        print('File {} is empty, exiting'.format(file))
+    if os.stat(FILE).st_size == 0:
+        print('FILE {} is empty, exiting'.format(FILE))
         sys.exit()
     READ_FILE = pd.read_csv('info.csv')
     ROUTERS = READ_FILE['Router'].to_list()
@@ -33,7 +37,7 @@ if __name__ == "__main__":
     NETWORKS = READ_FILE['Network'].to_list()
     AREA = READ_FILE['OSPF Area'].to_list()
 
-    cfg = '''
+    CFG = f'''
 	<config>
 	<cli-config-data>
 	<cmd> hostname %s </cmd>
@@ -56,12 +60,12 @@ if __name__ == "__main__":
                                      allow_agent=False,
                                      look_for_keys=True)
         print('Logging into router {} and sending configurations'.format(ROUTERS[i]))
-        cfg1 = cfg % (HOST[i], LO_NAME[i], LO_IP[i], MASK[i], NETWORKS[i], WILDCARD[i], AREA[i])
+        cfg1 = CFG % (HOST[i], LO_NAME[i], LO_IP[i], MASK[i], NETWORKS[i], WILDCARD[i], AREA[i])
         edit_cfg = connection.edit_config(target='running', config=cfg1)
 
     print('\n------------------Configs to all routers is sent------------------\n')
 
-    FETCH_INFO = '''
+    FETCH_INFO = f'''
     		<filter>
     		<config-format-text-block>
     		<text-filter-spec> %s </text-filter-spec>
@@ -80,25 +84,25 @@ if __name__ == "__main__":
                                      look_for_keys=True)
         print('Pulling information from router {} to display'.format(ROUTERS[i]))
 
-        fetch_hostname = FETCH_INFO % ('| i hostname')
-        output1 = connection.get_config('running', fetch_hostname)
+        FETCH_HOSTNAME = FETCH_INFO % ('| i hostname')
+        output1 = connection.get_config('running', FETCH_HOSTNAME)
         split1 = str(output1).split()
         hostname = split1[6]
 
-        fetch_lo_info = FETCH_INFO % ('int Loopback99')
-        output2 = connection.get_config('running', fetch_lo_info)
+        FETCH_LO_INFO = FETCH_INFO % ('int Loopback99')
+        output2 = connection.get_config('running', FETCH_LO_INFO)
         split2 = str(output2).split()
         lo_ip_mask = split2[9] + '/' + str(IPAddress(split2[10]).netmask_bits())
 
-        fetch_ospf_info = FETCH_INFO % ('| s ospf')
-        output3 = connection.get_config('running', fetch_ospf_info)
+        FETCH_OSPF_INFO = FETCH_INFO % ('| s ospf')
+        output3 = connection.get_config('running', FETCH_OSPF_INFO)
         split3 = str(output3).split()
-        lo_ip_prefix = str(ipaddress.ip_network(split3[9] + '/' + split3[10], strict=False)
+        LO_IP_PREFIX = str(ipaddress.ip_network(split3[9] + '/' + split3[10], strict=False)
                            .prefixlen)
-        mgm_ip_prefix = str(ipaddress.ip_network(split3[14] + '/' + split3[15], strict=False)
+        MGM_IP_PREFIX = str(ipaddress.ip_network(split3[14] + '/' + split3[15], strict=False)
                             .prefixlen)
         ospf_area = split3[12]
-        ospf_networks = split3[9] + '/' + lo_ip_prefix, split3[14] + '/' + mgm_ip_prefix
+        ospf_networks = split3[9] + '/' + LO_IP_PREFIX, split3[14] + '/' + MGM_IP_PREFIX
 
         TABLE.add_row((ROUTERS[i], hostname, lo_ip_mask, ospf_area, ospf_networks))
 
