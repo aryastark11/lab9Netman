@@ -17,6 +17,10 @@ except ImportError:
 if __name__ == "__main__":
 	"""
 	Read a CSV FILE for details and Configure OSPF on the interfaces .
+
+	Parameters: NONE
+
+	Returns: NONE
 	"""
 	TABLE = PrettyTable(['Router', 'Hostname', 'Loopback 99 IP',
 						 'OSPF area', 'Advertised OSPF Networks'])
