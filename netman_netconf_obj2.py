@@ -17,8 +17,8 @@ if __name__ == "__main__":
 	"""
 	TABLE = PrettyTable(['Router', 'Hostname', 'Loopback 99 IP',
 						 'OSPF area', 'Advertised OSPF Networks'])
-    FILE = 'info.csv'
-    if not os.path.exists(FILE):
+	FILE = 'info.csv'
+	if not os.path.exists(FILE):
         print("FILE {} not found, exiting".format(FILE))
         sys.exit()
     if os.stat(FILE).st_size == 0:
