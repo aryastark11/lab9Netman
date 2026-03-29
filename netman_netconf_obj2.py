@@ -34,10 +34,10 @@ if __name__ == "__main__":
 	LO_IP = READ_FILE['Loopback IP'].to_list()
 	MASK = READ_FILE['Loopback Subnet'].to_list()
 	WILDCARD = READ_FILE['Wildcard'].to_list()
-    NETWORKS = READ_FILE['Network'].to_list()
-    AREA = READ_FILE['OSPF Area'].to_list()
+	NETWORKS = READ_FILE['Network'].to_list()
+	AREA = READ_FILE['OSPF Area'].to_list()
 
-    CFG = f'''
+	CFG = f'''
 	<config>
 	<cli-config-data>
 	<cmd> hostname %s </cmd>
