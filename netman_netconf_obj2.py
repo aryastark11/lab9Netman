@@ -15,7 +15,7 @@ if __name__ == "__main__":
 	"""
 	Read a CSV FILE for details and Configure OSPF on the interfaces .
 	"""
-    TABLE = PrettyTable(['Router', 'Hostname', 'Loopback 99 IP',
+	TABLE = PrettyTable(['Router', 'Hostname', 'Loopback 99 IP',
 						 'OSPF area', 'Advertised OSPF Networks'])
     FILE = 'info.csv'
     if not os.path.exists(FILE):
