@@ -27,11 +27,22 @@ pipeline{
        sh '''python testcases.py'''
       }
     }
-    stage('Lint Python') {
-      steps{
-       sh '''/usr/bin/pylint netman_netconf_obj2.py > pylint.txt'''
-       recordIssues tools: {pyLint pattern: 'pylint.txt'}
-      }
+    stage('Lint') {
+        steps {
+            // Run pylint and save output
+            sh "pylint --output-format=parseable your_file.py > pylint.log || :"
+
+            // Record pylint warnings with thresholds
+            recordIssues(
+                tools: [pyLint(pattern: 'pylint.log')],
+                healthy: 5,      // 100% health if ≤ 5 warnings
+                unhealthy: 10,   // 0% health if ≥ 10 warnings
+                thresholdLimit: 10,   // fail build if >10 warnings
+                qualityGates: [
+                    [$class: 'QualityGate', threshold: 10, unstable: true]
+                ]
+            )
+        }
     }
   }
   post {
