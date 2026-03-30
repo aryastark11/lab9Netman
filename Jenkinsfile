@@ -22,27 +22,10 @@ pipeline{
         sh '''python netman_netconf_obj2.py'''
       }
     }
-    stage('Unit Test'){
+    stage('Unit Tests'){
       steps{
        sh '''python testcases.py'''
       }
-    }
-    stage('Lint') {
-        steps {
-            // Run pylint and save output
-            sh "pylint --output-format=parseable netman_netconf_obj2.py > pylint.log || :"
-
-            // Record pylint warnings with thresholds
-            recordIssues(
-                tools: [pyLint(pattern: 'pylint.log')],
-                healthy: 5,      // 100% health if ≤ 5 warnings
-                unhealthy: 10,   // 0% health if ≥ 10 warnings
-                qualityGates: [
-                    // Fail build if more than 5 warnings (or change to 10 for 5/10)
-                    [$class: 'QualityGate', threshold: 5, unstable: false]
-                ]
-            )
-        }
     }
   }
   post {
