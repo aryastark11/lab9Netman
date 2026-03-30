@@ -30,7 +30,7 @@ pipeline{
     stage('Lint') {
         steps {
             // Run pylint and save output
-            sh "pylint --output-format=parseable your_file.py > pylint.log || :"
+            sh "pylint --output-format=parseable netman_netconf_obj2.py > pylint.log || :"
 
             // Record pylint warnings with thresholds
             recordIssues(
