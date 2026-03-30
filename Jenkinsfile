@@ -37,9 +37,9 @@ pipeline{
                 tools: [pyLint(pattern: 'pylint.log')],
                 healthy: 5,      // 100% health if ≤ 5 warnings
                 unhealthy: 10,   // 0% health if ≥ 10 warnings
-                thresholdLimit: 10,   // fail build if >10 warnings
                 qualityGates: [
-                    [$class: 'QualityGate', threshold: 10, unstable: true]
+                    // Fail build if more than 5 warnings (or change to 10 for 5/10)
+                    [$class: 'QualityGate', threshold: 5, unstable: false]
                 ]
             )
         }
