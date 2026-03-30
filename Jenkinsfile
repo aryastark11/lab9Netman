@@ -28,4 +28,14 @@ pipeline{
       }
     }
   }
+  post {
+      success {
+          emailext(
+              subject: "Build Succeeded: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+              body: "Build succeeded. Check details at ${env.BUILD_URL}",
+              recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+              to: 'kavyamahadev2016@gmail.com'
+          )
+      }
+  }
 }
