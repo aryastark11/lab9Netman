@@ -33,8 +33,9 @@ pipeline{
           emailext(
               subject: "Jenkins Build Completed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
               body: "Jenkins Build Completed. Check details at ${env.BUILD_URL}",
-              recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-              to: 'kavyamahadev2016@gmail.com'
+              to: 'kavyamahadev2016@gmail.com',
+              from: 'kavyamahadev2016@gmail.com',
+              replyTo: 'kavyamahadev2016@gmail.com'
           )
       }
   }
