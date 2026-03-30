@@ -29,7 +29,7 @@ pipeline{
     }
     stage('Lint Python') {
     sh '/usr/bin/pylint netman_netconf_obj2.py > pylint.txt'
-    recordIssues tools: [pyLint pattern: 'pylint.txt']
+    recordIssues tools: {pyLint pattern: 'pylint.txt'}
     }
   }
   post {
