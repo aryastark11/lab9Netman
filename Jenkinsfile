@@ -33,6 +33,7 @@ pipeline{
        recordIssues tools: {pyLint pattern: 'pylint.txt'}
       }
     }
+  }
   post {
       always {
           emailext(
