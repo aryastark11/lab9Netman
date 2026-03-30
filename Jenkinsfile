@@ -29,7 +29,7 @@ pipeline{
     }
   }
   post {
-      success {
+      always {
           emailext(
               subject: "Build Succeeded: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
               body: "Build succeeded. Check details at ${env.BUILD_URL}",
