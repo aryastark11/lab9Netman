@@ -19,7 +19,7 @@ pipeline{
     }
     stage('Running the application'){
       steps{
-        sh '''python netman_netconf_obj2.py '''
+        sh '''python netman_netconf_obj2.py'''
       }
     }
     stage('Unit Test'){
