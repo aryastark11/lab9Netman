@@ -4,6 +4,7 @@ import unittest
 from ncclient import manager
 from netaddr import IPAddress
 import ipaddress
+import netmiko
 
 
 FETCH_INFO = """
@@ -37,26 +38,23 @@ class Tests(unittest.TestCase):
          self.assertEqual(loIP + '/' + loPrefix, inputToCompare)
 
      def test_router2(self):
-         connection = manager.connect(
-                      host='198.51.100.20',
-                      port=22,
-                      username='admin',
-                      password='admin',
-                      hostkey_verify=False,
-                      device_params={'name': 'iosxr'},
-                      allow_agent=False,
-                      look_for_keys=False,
-                      timeout=180)
-         filter_xml = '''
-         <filter>
-         <oper-data-format-text-block>
-         <show>ping 10.1.5.1 source loopback99 repeat 3</show>
-         </oper-data-format-text-block>
-         </filter>
-         '''
-         result = connection.get(filter=filter_xml)
-         output = str(result).lower()
-         self.assertTrue(output) #'success rate', output, "R2→R5 ping failed")
+         dictItem = {
+         "device_type": "cisco_ios",
+         "host": "R2",
+         "ip": '198.51.100.20',
+         "username": "admin",
+         "password": "admin",
+         "secret": "admin"
+          }
+         connect = netmiko.ConnectHandler(**dictItem)
+         connect.enable()
+
+         output = connect.send_command('ping 10.1.5.1 source 10.1.2.1')
+         stringOutput = str(output)
+         result = False
+         if 'Success rate' in stringOutput and '10.1.2.1' in stringOutput:
+             result = True
+         self.assertTrue(result)
 
 
      def test_router1(self):
