@@ -1,6 +1,5 @@
 "Configure routers using netconf"
 # Adding this comment for testing
-# adding this second line for testing
 
 
 from __future__ import print_function
